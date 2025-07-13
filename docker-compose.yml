@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.3
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      # Root credentials
+      MYSQL_ROOT_PASSWORD: Rawatbhata1@
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init-sql:/docker-entrypoint-initdb.d   # <–– see section 2
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "--password=Rawatbhata1@" ]
+      interval: 10s
+      retries: 5
+
+
+  # ---------- Auth Service ----------
+  auth-service:
+    image: user-auth-service
+    build:
+      context: ./user-auth-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/paytm_userauthdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Rawatbhata1@
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  # ---------- Wallet Service ----------
+  wallet-service:
+    image: wallet-service
+    build:
+      context: ./wallet-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/paytm_walletdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Rawatbhata1@
+      WALLET_BASE_URL: http://wallet-service:8080
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8083:8080"
+
+  # ---------- Transaction Service ----------
+  tx-service:
+    image: transaction-service
+    build:
+      context: ./transaction-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/paytm_transactiondb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Rawatbhata1@
+      WALLET_BASE_URL: http://wallet-service:8080
+    depends_on:
+      wallet-service:
+        condition: service_started
+    ports:
+      - "8084:8080"
+
+volumes:
+  mysql-data:
