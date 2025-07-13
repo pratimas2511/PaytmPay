@@ -1,12 +1,12 @@
 # 💸 PaytmPay – Wallet & Payment Microservices Backend
 
-A production-grade backend for a mini Paytm-style application, built using Spring Boot, MySQL, and Docker. Supports user authentication, wallet operations, and transactions — organized as scalable microservices.
+A production-grade distributed backend system for a mini Paytm-style application, built using Spring Boot, MySQL, and Docker. Supports user authentication, wallet operations, and transactions — organized as scalable microservices.
 
 ---
 
 ## 🔧 Tech Stack
 
-- **Spring Boot** (Auth, Wallet, Transaction Services)
+- **Spring Boot ** (Auth, Wallet, Transaction Services)
 - **MySQL 8.3** (Dockerized)
 - **Docker Compose**
 - **GitHub Actions CI** (build, test with MySQL)
