@@ -35,6 +35,6 @@ jobs:
 
       - name: Build all services with Maven
         run: |
-          cd user-auth-service && ./mvnw clean verify
-          cd ../wallet-service && ./mvnw clean verify
-          cd ../transaction-service && ./mvnw clean verify
+          cd User-auth-service && ./mvnw clean verify
+          cd ../Wallet-service && ./mvnw clean verify
+          cd ../Transaction-Service && ./mvnw clean verify
